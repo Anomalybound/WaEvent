@@ -41,40 +41,46 @@ namespace WaEvent.Core
                 var data = DataSet.Datas[i];
                 if (ControllerId != data.TargetController.GetInstanceID()) { continue; }
 
-                var currentState = _animator.GetCurrentAnimatorStateInfo(data.Layer);
+                foreach (var pair in data.Configs)
+                {
+                    var index = pair.Key;
+                    var currentState = _animator.GetCurrentAnimatorStateInfo(index.Layer);
 
-                if (!_stateIndexes.ContainsKey(data.Layer))
-                {
-                    _stateIndexes.Add(data.Layer, currentState.fullPathHash);
-                    _stateNormalizedTime[currentState.fullPathHash] = currentState.normalizedTime % 1f;
-                }
-                else
-                {
-                    if (_stateIndexes[data.Layer] != currentState.fullPathHash)
+                    if (!_stateIndexes.ContainsKey(index.Layer))
                     {
-                        // TODO if transition point too close to the event, event may be ignored.
+                        _stateIndexes.Add(index.Layer, currentState.fullPathHash);
                         _stateNormalizedTime[currentState.fullPathHash] = currentState.normalizedTime % 1f;
-                        _stateIndexes[data.Layer] = currentState.fullPathHash;
                     }
-                }
-
-                if (data.StateNameHash == currentState.shortNameHash)
-                {
-                    var currentNormalizedTime = currentState.normalizedTime % 1f;
-                    var lastNormalizedTime = _stateNormalizedTime[currentState.fullPathHash];
-                    
-                    for (var j = 0; j < data.Events.Count; j++)
+                    else
                     {
-                        var arg = data.Events[j];
-
-                        if (lastNormalizedTime < arg.NormalizedTime &&
-                            arg.NormalizedTime <= currentNormalizedTime)
+                        if (_stateIndexes[index.Layer] != currentState.fullPathHash)
                         {
-                            if (OnTriggerEvent != null) { OnTriggerEvent.Invoke(arg); }
+                            // TODO if transition point too close to the event, event may be ignored.
+                            _stateNormalizedTime[currentState.fullPathHash] = currentState.normalizedTime % 1f;
+                            _stateIndexes[index.Layer] = currentState.fullPathHash;
                         }
                     }
 
-                    _stateNormalizedTime[currentState.fullPathHash] = currentNormalizedTime;
+                    if (index.StateNameHash == currentState.shortNameHash)
+                    {
+                        var currentNormalizedTime = currentState.normalizedTime % 1f;
+                        var lastNormalizedTime = _stateNormalizedTime[currentState.fullPathHash];
+
+                        var events = pair.Value;
+
+                        for (var j = 0; j < events.Count; j++)
+                        {
+                            var arg = events[j];
+
+                            if (lastNormalizedTime < arg.NormalizedTime &&
+                                arg.NormalizedTime <= currentNormalizedTime)
+                            {
+                                if (OnTriggerEvent != null) { OnTriggerEvent.Invoke(arg); }
+                            }
+                        }
+
+                        _stateNormalizedTime[currentState.fullPathHash] = currentNormalizedTime;
+                    }
                 }
             }
         }
