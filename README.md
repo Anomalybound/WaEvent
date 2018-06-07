@@ -24,8 +24,8 @@ You can either
 
 2. Setup event data step by step.
 
-![](WaEvent/Docs/1.png)
+![](/Docs/1.png)
 
 3. Attach `AnimatorEventEmitter` to your `Animator` instance and give it the data just created.
 
-![](WaEvent/Docs/2.png)
+![](/Docs/2.png)
