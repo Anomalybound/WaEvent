@@ -1,9 +1,9 @@
 # WaEvent
 
-#### Intro
+## Intro
 This is a tool for Unity3D game engine. Aim for easy editing animation events and decouple logic event from artwork assets. Inspired by [Mecanim Event System](https://github.com/Ginurx/MecanimEventSystem).
 
-#### Structure
+## Structure
 
 `WaEvent/Core` Codebase
 
@@ -11,14 +11,14 @@ This is a tool for Unity3D game engine. Aim for easy editing animation events an
 
 `WaEvent/Util` 
 
-#### Intall
+## Intall
 
 You can either
 
  - add this repo as a submodule to your project
  - clone/download and unzip `WaEvent` folder to your project
  
-#### Tutorial
+## Tutorial
 
 1. Create a new event data set via context menu `WaEvent/New Event Data`.
 
