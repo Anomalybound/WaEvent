@@ -42,7 +42,7 @@ namespace WaEvent.Core
     }
 
     [Serializable]
-    public class StateIndexDictioanry : SerializableDictionary<StateIndex, List<AnimatorEventArgs>> { }
+    public class StateIndexDictioanry : SerializableDictionary<StateIndex, AnimatorEvents> { }
 
     [Serializable]
     public class EventData

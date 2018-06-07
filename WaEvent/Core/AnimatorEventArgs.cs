@@ -1,8 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
 namespace WaEvent.Core
 {
+    [Serializable]
+    public class AnimatorEvents : List<AnimatorEventArgs>
+    {
+        public AnimatorEvents() { }
+
+        public AnimatorEvents(IEnumerable<AnimatorEventArgs> args)
+        {
+            AddRange(args);
+        }
+    }
+
     [Serializable]
     public class AnimatorEventArgs
     {

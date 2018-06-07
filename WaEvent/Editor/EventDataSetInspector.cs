@@ -175,10 +175,7 @@ public class EventDataSetInspector : Editor
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
                 var index = new StateIndex(_selectedLayer, _selectedState);
-                if (!data.Configs.ContainsKey(index))
-                {
-                    data.Configs.Add(index, new List<AnimatorEventArgs>());
-                }
+                if (!data.Configs.ContainsKey(index)) { data.Configs.Add(index, new AnimatorEvents()); }
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -194,13 +191,20 @@ public class EventDataSetInspector : Editor
                                 _avatarPreview.Animator.Play(0, 0, _normalizedSetting);
                                 _avatarPreview.timeControl.normalizedTime = _normalizedSetting;
                             }
+
+                            if (_selectedEventArg != null)
+                            {
+                                _selectedEventArg.NormalizedTime = _normalizedSetting;
+                                data.Configs[index] =
+                                    new AnimatorEvents(data.Configs[index].OrderBy(x => x.NormalizedTime));
+                            }
                         }
                     }
 
                     if (GUILayout.Button("Add Event", EditorStyles.toolbarButton))
                     {
                         var countNum = data.Configs[index].Count;
-                        
+
                         var newEventArg = new AnimatorEventArgs
                         {
                             Name = "New Event " + countNum,
@@ -208,7 +212,7 @@ public class EventDataSetInspector : Editor
                         };
 
                         data.Configs[index].Add(newEventArg);
-                        data.Configs[index] = data.Configs[index].OrderBy(x => x.NormalizedTime).ToList();
+                        data.Configs[index] = new AnimatorEvents(data.Configs[index].OrderBy(x => x.NormalizedTime));
 
                         _selectedEventArg = newEventArg;
                     }
@@ -227,6 +231,12 @@ public class EventDataSetInspector : Editor
 
                         if (GUILayout.Button(normalizedTime + " - " + evt.Name))
                         {
+                            if (_selectedEventArg == evt)
+                            {
+                                _selectedEventArg = null;
+                                continue;
+                            }
+
                             _selectedEventArg = evt;
                             _selectedEventName = evt.Name;
                             _normalizedSetting = evt.NormalizedTime;
