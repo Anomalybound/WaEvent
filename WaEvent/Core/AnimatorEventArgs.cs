@@ -17,6 +17,7 @@ namespace WaEvent.Core
 
     public enum AnimatorEventType
     {
+        Pure,
         Float,
         Int,
         String,

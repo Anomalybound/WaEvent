@@ -277,6 +277,8 @@ public class EventDataSetInspector : Editor
 
                     switch (_selectedEventArg.Type)
                     {
+                        case AnimatorEventType.Pure:
+                            break;
                         case AnimatorEventType.Float:
                             _selectedEventArg.FloatParm =
                                 EditorGUILayout.FloatField("Float Parameter", _selectedEventArg.FloatParm);

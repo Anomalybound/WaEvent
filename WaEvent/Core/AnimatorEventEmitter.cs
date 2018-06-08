@@ -7,6 +7,9 @@ using Object = UnityEngine.Object;
 namespace WaEvent.Core
 {
     [Serializable]
+    public class PureEventWrapper : UnityEvent<string> { }
+
+    [Serializable]
     public class ObjectEventWrapper : UnityEvent<string, Object> { }
 
     [Serializable]
@@ -27,6 +30,7 @@ namespace WaEvent.Core
         public EventDataSet DataSet;
 
         public AnimatorEventWarpper OnTriggerEvent;
+        public PureEventWrapper OnTriggerPureEvent;
 
         public IntEventWrapper OnTriggerIntEvent;
         public FloatEventWrapper OnTriggerFloatEvent;
@@ -125,6 +129,10 @@ namespace WaEvent.Core
                                         {
                                             OnTriggerObjectEvent.Invoke(arg.Name, arg.ObjectParm);
                                         }
+
+                                        break;
+                                    case AnimatorEventType.Pure:
+                                        if (OnTriggerPureEvent != null) { OnTriggerPureEvent.Invoke(arg.Name); }
 
                                         break;
                                     default:
