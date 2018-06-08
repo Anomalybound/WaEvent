@@ -272,17 +272,30 @@ public class EventDataSetInspector : Editor
                         }
                     }
 
-                    _selectedEventArg.FloatParm =
-                        EditorGUILayout.FloatField("Float Parameter", _selectedEventArg.FloatParm);
+                    _selectedEventArg.Type =
+                        (AnimatorEventType) EditorGUILayout.EnumPopup("Event Type", _selectedEventArg.Type);
 
-                    _selectedEventArg.IntParm =
-                        EditorGUILayout.IntField("Int Parameter", _selectedEventArg.IntParm);
-
-                    _selectedEventArg.StringParm =
-                        EditorGUILayout.TextField("String Parameter", _selectedEventArg.StringParm);
-
-                    _selectedEventArg.ObjectParm = EditorGUILayout.ObjectField("Object Parameter",
-                        _selectedEventArg.ObjectParm, typeof(Object), false);
+                    switch (_selectedEventArg.Type)
+                    {
+                        case AnimatorEventType.Float:
+                            _selectedEventArg.FloatParm =
+                                EditorGUILayout.FloatField("Float Parameter", _selectedEventArg.FloatParm);
+                            break;
+                        case AnimatorEventType.Int:
+                            _selectedEventArg.IntParm =
+                                EditorGUILayout.IntField("Int Parameter", _selectedEventArg.IntParm);
+                            break;
+                        case AnimatorEventType.String:
+                            _selectedEventArg.StringParm =
+                                EditorGUILayout.TextField("String Parameter", _selectedEventArg.StringParm);
+                            break;
+                        case AnimatorEventType.Object:
+                            _selectedEventArg.ObjectParm = EditorGUILayout.ObjectField("Object Parameter",
+                                _selectedEventArg.ObjectParm, typeof(Object), false);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
 
                     EditorGUILayout.EndVertical();
                 }

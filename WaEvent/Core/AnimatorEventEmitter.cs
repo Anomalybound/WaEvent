@@ -2,9 +2,22 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace WaEvent.Core
 {
+    [Serializable]
+    public class ObjectEventWrapper : UnityEvent<string, Object> { }
+
+    [Serializable]
+    public class StringEventWrapper : UnityEvent<string, string> { }
+
+    [Serializable]
+    public class FloatEventWrapper : UnityEvent<string, float> { }
+
+    [Serializable]
+    public class IntEventWrapper : UnityEvent<string, int> { }
+
     [Serializable]
     public class AnimatorEventWarpper : UnityEvent<AnimatorEventArgs> { }
 
@@ -14,6 +27,11 @@ namespace WaEvent.Core
         public EventDataSet DataSet;
 
         public AnimatorEventWarpper OnTriggerEvent;
+
+        public IntEventWrapper OnTriggerIntEvent;
+        public FloatEventWrapper OnTriggerFloatEvent;
+        public StringEventWrapper OnTriggerStringEvent;
+        public ObjectEventWrapper OnTriggerObjectEvent;
 
         private RuntimeAnimatorController Controller
         {
@@ -39,6 +57,8 @@ namespace WaEvent.Core
             for (var i = 0; i < DataSet.Datas.Count; i++)
             {
                 var data = DataSet.Datas[i];
+                if (data.TargetController == null) { continue; }
+
                 if (ControllerId != data.TargetController.GetInstanceID()) { continue; }
 
                 foreach (var pair in data.Configs)
@@ -76,6 +96,40 @@ namespace WaEvent.Core
                                 arg.NormalizedTime <= currentNormalizedTime)
                             {
                                 if (OnTriggerEvent != null) { OnTriggerEvent.Invoke(arg); }
+
+                                switch (arg.Type)
+                                {
+                                    case AnimatorEventType.Float:
+                                        if (OnTriggerFloatEvent != null)
+                                        {
+                                            OnTriggerFloatEvent.Invoke(arg.Name, arg.FloatParm);
+                                        }
+
+                                        break;
+                                    case AnimatorEventType.Int:
+                                        if (OnTriggerIntEvent != null)
+                                        {
+                                            OnTriggerIntEvent.Invoke(arg.Name, arg.IntParm);
+                                        }
+
+                                        break;
+                                    case AnimatorEventType.String:
+                                        if (OnTriggerStringEvent != null)
+                                        {
+                                            OnTriggerStringEvent.Invoke(arg.Name, arg.StringParm);
+                                        }
+
+                                        break;
+                                    case AnimatorEventType.Object:
+                                        if (OnTriggerObjectEvent != null)
+                                        {
+                                            OnTriggerObjectEvent.Invoke(arg.Name, arg.ObjectParm);
+                                        }
+
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
                             }
                         }
 
