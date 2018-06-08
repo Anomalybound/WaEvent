@@ -5,13 +5,13 @@ using Object = UnityEngine.Object;
 namespace WaEvent.Core
 {
     [Serializable]
-    public class AnimatorEvents : List<AnimatorEventArgs>
+    public class AnimatorEvents : ListWrapper<AnimatorEventArgs>
     {
         public AnimatorEvents() { }
 
         public AnimatorEvents(IEnumerable<AnimatorEventArgs> args)
         {
-            AddRange(args);
+            Value.AddRange(args);
         }
     }
 

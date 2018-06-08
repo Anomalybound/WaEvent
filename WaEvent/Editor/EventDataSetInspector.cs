@@ -196,14 +196,14 @@ public class EventDataSetInspector : Editor
                             {
                                 _selectedEventArg.NormalizedTime = _normalizedSetting;
                                 data.Configs[index] =
-                                    new AnimatorEvents(data.Configs[index].OrderBy(x => x.NormalizedTime));
+                                    new AnimatorEvents(data.Configs[index].Value.OrderBy(x => x.NormalizedTime));
                             }
                         }
                     }
 
                     if (GUILayout.Button("Add Event", EditorStyles.toolbarButton))
                     {
-                        var countNum = data.Configs[index].Count;
+                        var countNum = data.Configs[index].Value.Count;
 
                         var newEventArg = new AnimatorEventArgs
                         {
@@ -211,18 +211,19 @@ public class EventDataSetInspector : Editor
                             NormalizedTime = _normalizedSetting
                         };
 
-                        data.Configs[index].Add(newEventArg);
-                        data.Configs[index] = new AnimatorEvents(data.Configs[index].OrderBy(x => x.NormalizedTime));
+                        data.Configs[index].Value.Add(newEventArg);
+                        data.Configs[index] = new AnimatorEvents(data.Configs[index].Value.OrderBy(x => x.NormalizedTime));
 
                         _selectedEventArg = newEventArg;
+                        EditorUtility.SetDirty(_dataSet);
                     }
                 }
 
                 EditorGUILayout.LabelField("3. Edit Events", EditorStyles.centeredGreyMiniLabel);
 
-                for (var i = 0; i < data.Configs[index].Count; i++)
+                for (var i = 0; i < data.Configs[index].Value.Count; i++)
                 {
-                    var evt = data.Configs[index][i];
+                    var evt = data.Configs[index].Value[i];
                     var normalizedTime = evt.NormalizedTime.ToString("F3");
 
                     using (new EditorGUILayout.HorizontalScope())
@@ -252,7 +253,7 @@ public class EventDataSetInspector : Editor
 
                         if (GUILayout.Button("DEL", GUILayout.Width(45)))
                         {
-                            _delayedActions.Add(() => data.Configs[index].Remove(evt));
+                            _delayedActions.Add(() => data.Configs[index].Value.Remove(evt));
                             if (_selectedEventArg == evt) { _selectedEventArg = null; }
                         }
                     }

@@ -92,9 +92,9 @@ namespace WaEvent.Core
 
                         var events = pair.Value;
 
-                        for (var j = 0; j < events.Count; j++)
+                        for (var j = 0; j < events.Value.Count; j++)
                         {
-                            var arg = events[j];
+                            var arg = events.Value[j];
 
                             if (lastNormalizedTime < arg.NormalizedTime &&
                                 arg.NormalizedTime <= currentNormalizedTime)
